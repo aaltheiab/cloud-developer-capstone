@@ -14,6 +14,15 @@
     },
     "sku": {
       "type": "string"
+    },
+    "length":{
+      "type": "number"
+    },
+    "width": {
+      "type": "number"
+    },
+    "height": {
+      "type": "number"
     }
   },
   "required": [
