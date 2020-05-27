@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "box",
+  "type": "object",
+  "properties": {
+    "boxId": {
+      "type": "string"
+    },
+    "createdAt": {
+      "type": "string"
+    },
+    "attachmentUrl": {
+      "type": "string"
+    },
+    "sku": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "sku"
+  ],
+  "additionalProperties": false
+}
