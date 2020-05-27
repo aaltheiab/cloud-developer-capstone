@@ -3,4 +3,7 @@ export interface BoxItem {
   createdAt: string
   sku: string
   attachmentUrl?: string
+  length: number
+  width: number
+  height: number
 }
