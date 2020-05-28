@@ -26,7 +26,10 @@
     }
   },
   "required": [
-    "sku"
+    "sku",
+    "length",
+    "width",
+    "height"
   ],
   "additionalProperties": false
 }

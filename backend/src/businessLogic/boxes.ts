@@ -1,9 +1,9 @@
 // models 
 import { BoxItem } from '../models/BoxItem'
-// import { TodoUpdate } from '../models/TodoUpdate'
-
+// import { BoxUpdate } from '../models/BoxUpdate'
 import { BoxesAccess } from '../dataLayer/boxesAccess'
 import { CreateBoxRequest } from '../requests/CreateBoxRequest'
+import { UpdateBoxRequest } from '../requests/UpdateBoxRequest'
 
 
 const boxesAccess = new BoxesAccess()
@@ -17,6 +17,9 @@ export async function createBox(boxId:string, newBox: CreateBoxRequest): Promise
     return boxesAccess.createBox(boxId, newBox)
 }
 
+export async function updateBox(boxId:string, sku:string, updatedBox: UpdateBoxRequest){
+    return boxesAccess.updateBox(boxId, sku, updatedBox)
+}
 
 
 // export async function getTodos(userId:string): Promise<TodoItem[]> {

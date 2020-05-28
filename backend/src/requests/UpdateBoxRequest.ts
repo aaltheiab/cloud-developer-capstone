@@ -1,6 +1,4 @@
-export interface CreateBoxRequest {
-  boxId: string
-  createdAt: string
+export interface UpdateBoxRequest {
   sku: string
   attachmentUrl?: string
   length: number

@@ -69,7 +69,7 @@ functions:
           reqValidatorName: RequestBodyValidator
           request:
             schema:
-              application/json: ${file(models/create-box-request.json)}
+              application/json: ${file(validators/create-box-request.json)}
           # documentation:
           #   summary: Create a new image
           #   description: Create a new image
@@ -83,6 +83,27 @@ functions:
       - Effect: Allow
         Action:
           - dynamodb:PutItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.BOXES_TABLE}/${self:provider.environment.INDEX_NAME}
+
+  UpdateBox:
+    handler: src/lambda/http/updateBox.handler
+    events:
+      - http:
+          method: patch
+          path: boxes/{boxId}
+          cors: true
+          # authorizer: Auth
+          request:
+            schema:
+              application/json: ${file(validators/update-box-request.json)}
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:UpdateItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.BOXES_TABLE}
+      - Effect: Allow
+        Action:
+          - dynamodb:UpdateItem
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.BOXES_TABLE}/${self:provider.environment.INDEX_NAME}
 
   

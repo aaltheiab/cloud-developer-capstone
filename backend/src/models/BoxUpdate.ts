@@ -1,6 +1,4 @@
-export interface BoxItem {
-  boxId: string
-  createdAt: string
+export interface BoxUpdate {
   sku: string
   length: number
   width: number

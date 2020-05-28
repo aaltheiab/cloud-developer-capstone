@@ -2,7 +2,11 @@ import * as AWS from 'aws-sdk'
 import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 import { BoxItem } from '../models/BoxItem'
 import { CreateBoxRequest } from '../requests/CreateBoxRequest'
+import { UpdateBoxRequest } from '../requests/UpdateBoxRequest'
 // import { TodoUpdate } from '../models/TodoUpdate'
+// import { createLogger } from '../utils/logger'
+// const logger = createLogger('BoxesAccess')
+
 const DEFAULT_URL = 'https://aaltheiab-serverless-capstone-dev.s3.amazonaws.com/no-image.jpg'
 
 function createDynamoDBClient() {
@@ -51,41 +55,33 @@ export class BoxesAccess {
     return newItem as BoxItem
   }
 
+  async updateBox(boxId: string, sku: string, updatedBox: UpdateBoxRequest): Promise<BoxItem> {
 
-  // async getTodos(userId: string): Promise<TodoItem[]> {
-  //   console.log('Getting all Todos')
+    const params = {
+      TableName: this.boxesTable,
+      Key: {
+        boxId,
+        sku
+      },
+      UpdateExpression: "set #length = :length, width = :width, height = :height, attachmentUrl=:attachmentUrl",
+      ExpressionAttributeNames: {
+        '#length': 'length'
+      },
+      ExpressionAttributeValues: {
+        ":length": updatedBox.length,
+        ":width": updatedBox.width,
+        ":height": updatedBox.height,
+        ":attachmentUrl": updatedBox.attachmentUrl
+      },
+      ReturnValues: "UPDATED_NEW"
+    };
 
-  //   const result = await this.docClient.query({
-  //     TableName: this.todosTable,
-  //     // IndexName : imageIdIndex,
-  //     KeyConditionExpression: 'userId = :userId',
-  //     ExpressionAttributeValues: {
-  //       ':userId': userId
-  //     }
-  //   }).promise()
+    // source:
+    // https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GettingStarted.NodeJs.03.html#GettingStarted.NodeJs.03.03
+    const updatedItem = await this.docClient.update(params).promise();
 
-  //   const items = result.Items
-  //   return items as TodoItem[]
-  // }
-
-  // async createTodo(userId: string, todoId: string, newTodo: CreateTodoRequest): Promise<TodoItem> {
-  //   const createdAt = new Date().toISOString()
-
-  //   const newItem = {
-  //     userId,
-  //     todoId,
-  //     createdAt,
-  //     done: false,
-  //     ...newTodo
-  //   }
-
-  //   await this.docClient.put({
-  //     TableName: this.todosTable,
-  //     Item: newItem
-  //   }).promise()
-
-  //   return newItem as TodoItem
-  // }
+    return updatedItem.Attributes as BoxItem
+  }
 
   // async updateTodo(userId: string, todoId: string, updatedTodo: TodoUpdate): Promise<TodoItem> {
 
@@ -115,7 +111,7 @@ export class BoxesAccess {
   // }
 
   // async deleteTodo(userId: string, todoId: string): Promise<void> {
-    
+
   //   var params = {
   //     TableName: this.todosTable,
   //     Key: {
