@@ -25,18 +25,17 @@ export default class BoxesList extends React.Component {
 
     componentDidMount() {
         axios.get("https://s8hqimc18h.execute-api.us-east-1.amazonaws.com/dev/boxes/").then(res => {
-            
-        this.setState({ images: res.data.items })
+            this.setState({ images: res.data.items })
         });
     }
 
 
     render() {
         return (
-            
+
             <div class="row justify-content-center">
-                <br/><br/><br/>
-                
+                <br /><br /><br />
+
                 <div className='col-cm-12'>
                     <InputGroup>
                         <InputGroupAddon addonType="prepend">
@@ -48,18 +47,21 @@ export default class BoxesList extends React.Component {
                     </InputGroup>
                 </div>
 
-                <br/><br/><br/>
+                <br /><br /><br />
 
                 <Container className="themed-container">
                     <Row>
                         {this.state.images.map(box => (
                             <Col sm='4'>
                                 <Card>
-                                    <CardImg top src={box.src} />
+                                    <CardImg top src={box.attachmentUrl} />
                                     <CardBody>
-                                        <CardTitle>Card title</CardTitle>
-                                        <CardSubtitle>Card subtitle</CardSubtitle>
-                                        <CardText>Some quick example text to build on the card title and make up the bulk of the card's content.</CardText>
+                                        <CardTitle>Box #: {box.sku} </CardTitle>
+                                        <CardText>
+                                            W: {box.width} MM => {box.width / 10} CM <br/>
+                                            L: {box.length} MM => {box.length / 10} CM <br/>
+                                            H: {box.height} MM => {box.height / 10} CM
+                                        </CardText>
                                         <Button>Button</Button>
                                     </CardBody>
                                 </Card>
