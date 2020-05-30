@@ -1,7 +1,7 @@
 export interface UpdateBoxRequest {
   sku: string
   attachmentUrl?: string
-  length: number
+  leng: number
   width: number
   height: number
 }

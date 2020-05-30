@@ -1,5 +1,4 @@
 import 'source-map-support/register'
-import * as uuid from 'uuid'
 import { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } from 'aws-lambda'
 import {createBox} from '../../businessLogic/boxes'
 import { CreateBoxRequest } from '../../requests/CreateBoxRequest'
@@ -12,9 +11,10 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
 
     logger.info('creating a new Box Item.', event)
 
-    const boxId = uuid.v4();
+    
     // const userId = getUserId(event)
-    const result = await createBox(boxId, newBox)
+    const sku = newBox.sku
+    const result = await createBox(sku, newBox)
 
     return {
         statusCode: 201,

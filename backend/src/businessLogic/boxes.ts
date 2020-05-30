@@ -9,16 +9,16 @@ import { UpdateBoxRequest } from '../requests/UpdateBoxRequest'
 const boxesAccess = new BoxesAccess()
 
 
-export async function getBoxes(): Promise<BoxItem[]> {
-    return boxesAccess.getBoxes()
+export async function getBoxes(params: object): Promise<BoxItem[]> {
+    return boxesAccess.getBoxes(params)
 }
 
-export async function createBox(boxId:string, newBox: CreateBoxRequest): Promise<BoxItem> {
-    return boxesAccess.createBox(boxId, newBox)
+export async function createBox(sku:string, newBox: CreateBoxRequest): Promise<BoxItem> {
+    return boxesAccess.createBox(sku, newBox)
 }
 
-export async function updateBox(boxId:string, sku:string, updatedBox: UpdateBoxRequest){
-    return boxesAccess.updateBox(boxId, sku, updatedBox)
+export async function updateBox(sku:string, updatedBox: UpdateBoxRequest){
+    return boxesAccess.updateBox(sku, updatedBox)
 }
 
 

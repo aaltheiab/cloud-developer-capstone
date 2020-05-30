@@ -9,7 +9,7 @@
     "sku": {
       "type": "string"
     },
-    "length":{
+    "leng":{
       "type": "number"
     },
     "width": {

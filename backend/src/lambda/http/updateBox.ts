@@ -9,41 +9,22 @@ const logger = createLogger('UpdateBox')
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
 
-
-
-
     logger.info('Processing UpdateBox event', event)
 
-    const boxId = event.pathParameters.boxId
+    const sku = event.pathParameters.sku
     const updatedBox: UpdateBoxRequest = JSON.parse(event.body)
-
-    const sku = updatedBox.sku
-
-    if (!sku) {
-        logger.info('SKU not found', {
-            boxId,
-            updateBox
-        })
-
-        return {
-            statusCode: 400,
-            body: JSON.stringify({
-                error: 'SKU MISSING OR INVALID'
-            })
-        }
-    }
 
 
     logger.info('Box Info Fetched Successfully', {
-        boxId,
+        sku,
         updateBox
     })
 
-    const result = await updateBox(boxId, sku, updatedBox)
+    const result = await updateBox(sku, updatedBox)
 
 
     logger.info('Box Updated Successfully', {
-        boxId
+        sku
     })
 
     return {

@@ -1,6 +1,6 @@
 export interface BoxUpdate {
   sku: string
-  length: number
+  leng: number
   width: number
   height: number
   attachmentUrl?: string

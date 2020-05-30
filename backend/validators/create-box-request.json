@@ -3,9 +3,6 @@
   "title": "box",
   "type": "object",
   "properties": {
-    "boxId": {
-      "type": "string"
-    },
     "createdAt": {
       "type": "string"
     },
@@ -15,7 +12,7 @@
     "sku": {
       "type": "string"
     },
-    "length":{
+    "leng":{
       "type": "number"
     },
     "width": {
@@ -27,7 +24,7 @@
   },
   "required": [
     "sku",
-    "length",
+    "leng",
     "width",
     "height"
   ],

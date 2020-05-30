@@ -16,11 +16,10 @@ provider:
 
   environment:
     BOXES_TABLE: Boxes-${self:provider.stage}
-    TODOS_TABLE: Todos-${self:provider.stage}
     INDEX_NAME: BoxesIndex
     SIGNED_URL_EXPIRATION: 300
     IMAGES_S3_BUCKET: aaltheiab-serverless-capstone-${self:provider.stage}
-
+    
 
 custom:
   serverless-offline:
@@ -90,7 +89,7 @@ functions:
     events:
       - http:
           method: patch
-          path: boxes/{boxId}
+          path: boxes/{sku}
           cors: true
           # authorizer: Auth
           request:
@@ -150,29 +149,40 @@ resources:
       Type: "AWS::DynamoDB::Table"
       Properties:
         AttributeDefinitions:
-          - AttributeName: boxId
-            AttributeType: S
           - AttributeName: sku
             AttributeType: S
-          - AttributeName: createdAt
-            AttributeType: S
+          # - AttributeName: length
+          #   AttributeType: N
+          # - AttributeName: width
+          #   AttributeType: N
+          # - AttributeName: height
+          #   AttributeType: N
           
         KeySchema:
-          - AttributeName: boxId
-            KeyType: HASH
           - AttributeName: sku
-            KeyType: RANGE
-        LocalSecondaryIndexes:
-          - IndexName: ${self:provider.environment.INDEX_NAME}
-            KeySchema:
-              - AttributeName: boxId
-                KeyType: HASH
-              - AttributeName: createdAt
-                KeyType: RANGE
-            Projection:
-              ProjectionType: ALL # What attributes will be copied to an index
+            KeyType: HASH
         BillingMode: PAY_PER_REQUEST
         TableName: ${self:provider.environment.BOXES_TABLE}
+        # GlobalSecondaryIndexes:
+          # - IndexName: length-${self:provider.environment.INDEX_NAME}
+          #   KeySchema:
+          #     - AttributeName: length
+          #       KeyType: HASH
+          #   Projection:
+          #     ProjectionType: KEYS_ONLY 
+          # - IndexName: height-${self:provider.environment.INDEX_NAME}
+          #   KeySchema:
+          #     - AttributeName: height
+          #       KeyType: HASH
+          #   Projection:
+          #     ProjectionType: KEYS_ONLY 
+          # - IndexName: ${self:provider.environment.INDEX_NAME}
+          #   KeySchema:
+          #     - AttributeName: width
+          #       KeyType: HASH
+          #   Projection:
+          #     ProjectionType: KEYS_ONLY 
+        
 
     AttachmentsBucket:
       Type: AWS::S3::Bucket
