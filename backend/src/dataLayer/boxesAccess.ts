@@ -17,8 +17,7 @@ export class BoxesAccess {
 
   constructor(
     private readonly docClient: DocumentClient = createDynamoDBClient(),
-    private readonly boxesTable = process.env.BOXES_TABLE//,
-    // private readonly boxesIndex = process.env.INDEX_NAME
+    private readonly boxesTable = process.env.BOXES_TABLE
   ) {
   }
 
@@ -40,46 +39,27 @@ export class BoxesAccess {
       var paramsCombined = []
 
       if (width) {
-        paramsCombined.push({
-          FilterExpression: "(width BETWEEN :widthStart AND :widthEnd)",
-          ExpressionAttributeValues: {
-            ":widthStart": width - (width * PERCENTAGE / 100),
-            ":widthEnd": parseFloat(width) + (width * PERCENTAGE / 100)
-          }
-        })
+        paramsCombined.push(generateParam('width', width))
       }
 
-      if (height){
-        paramsCombined.push({
-          FilterExpression: "(height BETWEEN :heightStart AND :heightEnd)",
-          ExpressionAttributeValues: {
-            ":heightStart": parseFloat(height) - (height * PERCENTAGE / 100),
-            ":heightEnd": parseFloat(height) + (height * PERCENTAGE / 100)
-          }
-        })
+      if (height) {
+        paramsCombined.push(generateParam('height', height))
       }
-
 
       if (length) {
-        paramsCombined.push({
-          FilterExpression: "(leng BETWEEN :lengStart AND :lengEnd)",
-          ExpressionAttributeValues: {
-            ":lengStart": parseFloat(length) - (length * PERCENTAGE / 100),
-            ":lengEnd": parseFloat(length) + (length * PERCENTAGE / 100)
-          }
-        })
+        paramsCombined.push(generateParam('leng', length))
       }
 
       logger.info("paramsCombined", {
         paramsCombined
       })
 
-      for(var i = 0; i < paramsCombined.length; i++){
+      for (var i = 0; i < paramsCombined.length; i++) {
         var obj = paramsCombined[i]
-        paramResult['ExpressionAttributeValues'] = {...paramResult['ExpressionAttributeValues'], ...obj['ExpressionAttributeValues']}
+        paramResult['ExpressionAttributeValues'] = { ...paramResult['ExpressionAttributeValues'], ...obj['ExpressionAttributeValues'] }
         paramResult['FilterExpression'] += obj['FilterExpression']
-        
-        if(i < paramsCombined.length - 1){
+
+        if (i < paramsCombined.length - 1) {
           paramResult['FilterExpression'] += " AND "
         }
       }
@@ -88,10 +68,9 @@ export class BoxesAccess {
         paramResult
       })
 
-
       const result = await this.docClient.scan(paramResult).promise()
 
-      return result.Items as BoxItem[]      
+      return result.Items as BoxItem[]
 
     } else {
 
@@ -188,3 +167,20 @@ export class BoxesAccess {
 
 }
 
+
+function generateParam(paramStr: string, paramValue: string) {
+
+  const start = `:${paramStr}Start`
+  const end = `:${paramStr}End`
+
+  var params = {
+    FilterExpression: `(${paramStr} BETWEEN ${start} AND ${end})`,
+    ExpressionAttributeValues: {}
+  }
+
+  params['ExpressionAttributeValues'][start] = parseFloat(paramValue) - (parseFloat(paramValue) * PERCENTAGE / 100)
+  params['ExpressionAttributeValues'][end] = parseFloat(paramValue) + (parseFloat(paramValue) * PERCENTAGE / 100)
+  
+  return params
+
+}
