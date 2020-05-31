@@ -1,30 +1,58 @@
 import React from 'react';
 import axios from 'axios';
 import {
-    InputGroup, InputGroupAddon, Input
+    InputGroup, Input
 } from 'reactstrap';
-
 
 import {
     Card, CardImg, CardText, CardBody,
-    CardTitle, CardSubtitle, Button, Container, Row, Col
+    CardTitle, Button, Container, Row, Col
 } from 'reactstrap';
+
+const BASE_URL = 'https://kpkzrk2tc7.execute-api.us-east-1.amazonaws.com/dev/boxes/'
 
 export default class BoxesList extends React.Component {
 
     state = {
-        boxes: [],
-        currentImage: 0,
-        viewerIsOpen: false,
-        images: []
+        images: [],
+        length:'',
+        width: '',
+        height: ''
     };
+
+    handleChange = event => {
+        switch(event.target.id){
+            case 'lengthId':
+                this.setState({ length: event.target.value });
+                break;
+            case 'widthId':
+                this.setState({ width: event.target.value });
+                break;
+            case 'heightId':
+                this.setState({ height: event.target.value });
+                break;
+        }
+    }
+
+    handleKeyDown = event => {
+        if(event.keyCode ===  13) {
+            this.fetchResult(event);
+        }
+    }
+
+    fetchResult = event => {
+        axios.get(`${BASE_URL}?leng=${this.state.length}&width=${this.state.width}&height=${this.state.height}`).then(res => {
+            this.setState({ images: res.data.items })
+        });
+    }
+
 
     toggleModal = () => {
         this.setState(state => ({ modalIsOpen: !state.modalIsOpen }));
     }
 
     componentDidMount() {
-        axios.get("https://s8hqimc18h.execute-api.us-east-1.amazonaws.com/dev/boxes/").then(res => {
+        axios.get(`${BASE_URL}`).then(res => {
             this.setState({ images: res.data.items })
         });
     }
@@ -38,12 +66,16 @@ export default class BoxesList extends React.Component {
 
                 <div className='col-cm-12'>
                     <InputGroup>
-                        <InputGroupAddon addonType="prepend">
+                        {/* <InputGroupAddon addonType="prepend"> */}
                             {/* <InputGroupText>
+                                <span>M</span>
                                 <Input addon type="checkbox" aria-label="Checkbox for following text input" />
                             </InputGroupText> */}
-                        </InputGroupAddon>
-                        <Input placeholder="Search Box #" />
+                        {/* </InputGroupAddon> */}
+                        <Input type='number' onKeyDown={this.handleKeyDown} onChange={this.handleChange} id='lengthId' placeholder="Length" />
+                        <Input type='number' onKeyDown={this.handleKeyDown} onChange={this.handleChange} id='widthId' placeholder="Width" />
+                        <Input type='number' onKeyDown={this.handleKeyDown} onChange={this.handleChange} id='heightId' placeholder="Height" />
+                        <button onClick={this.fetchResult}>Search</button>
                     </InputGroup>
                 </div>
 
@@ -58,8 +90,8 @@ export default class BoxesList extends React.Component {
                                     <CardBody>
                                         <CardTitle>Box #: {box.sku} </CardTitle>
                                         <CardText>
-                                            W: {box.width} MM => {box.width / 10} CM <br/>
-                                            L: {box.length} MM => {box.length / 10} CM <br/>
+                                            W: {box.width} MM => {box.width / 10} CM <br />
+                                            L: {box.length || box.leng} MM => {(box.length || box.leng) / 10} CM <br />
                                             H: {box.height} MM => {box.height / 10} CM
                                         </CardText>
                                         <Button>Button</Button>
