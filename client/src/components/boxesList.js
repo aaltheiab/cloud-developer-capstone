@@ -94,7 +94,7 @@ export default class BoxesList extends React.Component {
                                             L: {box.length || box.leng} MM => {(box.length || box.leng) / 10} CM <br />
                                             H: {box.height} MM => {box.height / 10} CM
                                         </CardText>
-                                        <Button>Button</Button>
+                                        {/* <Button>Button</Button> */}
                                     </CardBody>
                                 </Card>
                             </Col>

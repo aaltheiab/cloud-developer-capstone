@@ -21,6 +21,10 @@ export async function updateBox(sku:string, updatedBox: UpdateBoxRequest){
     return boxesAccess.updateBox(sku, updatedBox)
 }
 
+export async function getBox(sku: string): Promise<BoxItem> {
+    return boxesAccess.getBox(sku)
+}
+
 
 // export async function getTodos(userId:string): Promise<TodoItem[]> {
 //     return todoAccess.getTodos(userId)

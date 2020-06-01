@@ -57,6 +57,21 @@ functions:
           - dynamodb:Scan
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.BOXES_TABLE}/index/${self:provider.environment.INDEX_NAME}
 
+  GetBox:
+    handler: src/lambda/http/getBox.handler
+    events:
+      - http:
+          method: get
+          path: boxes/{sku}
+          cors: true
+          # authorizer: Auth
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:Scan
+          - dynamodb:GetItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.BOXES_TABLE}
+
   CreateBox:
     handler: src/lambda/http/createBox.handler
     events:

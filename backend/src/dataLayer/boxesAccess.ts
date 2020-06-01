@@ -3,7 +3,6 @@ import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 import { BoxItem } from '../models/BoxItem'
 import { CreateBoxRequest } from '../requests/CreateBoxRequest'
 import { UpdateBoxRequest } from '../requests/UpdateBoxRequest'
-// import { TodoUpdate } from '../models/TodoUpdate'
 import { createLogger } from '../utils/logger'
 const logger = createLogger('BoxesAccess')
 
@@ -129,6 +128,22 @@ export class BoxesAccess {
   }
 
 
+  async getBox(sku: string): Promise<BoxItem> {
+
+    const params = {
+      TableName: this.boxesTable,
+      Key: {
+        sku
+      }
+    };
+
+    const result = await this.docClient.get(params).promise()
+
+    return result.Item as BoxItem
+  }
+
+
+
   // async deleteTodo(userId: string, todoId: string): Promise<void> {
 
   //   var params = {
@@ -180,7 +195,7 @@ function generateParam(paramStr: string, paramValue: string) {
 
   params['ExpressionAttributeValues'][start] = parseFloat(paramValue) - (parseFloat(paramValue) * PERCENTAGE / 100)
   params['ExpressionAttributeValues'][end] = parseFloat(paramValue) + (parseFloat(paramValue) * PERCENTAGE / 100)
-  
+
   return params
 
 }

@@ -1,7 +1,6 @@
 import 'source-map-support/register'
 import { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } from 'aws-lambda'
 import { UpdateBoxRequest } from '../../requests/UpdateBoxRequest'
-// import { getUserId } from '../utils'
 import { updateBox } from '../../businessLogic/boxes'
 import { createLogger } from '../../utils/logger'
 
