@@ -1,0 +1,1 @@
+export const BASE_URL = 'https://kpkzrk2tc7.execute-api.us-east-1.amazonaws.com/dev/boxes/'
