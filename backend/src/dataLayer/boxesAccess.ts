@@ -142,44 +142,6 @@ export class BoxesAccess {
     return result.Item as BoxItem
   }
 
-
-
-  // async deleteTodo(userId: string, todoId: string): Promise<void> {
-
-  //   var params = {
-  //     TableName: this.todosTable,
-  //     Key: {
-  //       "userId": userId,
-  //       "todoId": todoId
-  //     }
-  //   };
-
-  //   // source:
-  //   // https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GettingStarted.NodeJs.03.html#GettingStarted.NodeJs.03.06
-  //   await this.docClient.delete(params).promise();
-  // }
-
-
-  // async updateTodoImageUrl(userId: string, todoId: string, imageUrl: string): Promise<void> {
-
-  //   var params = {
-  //     TableName: this.boxesTable,
-  //     Key: {
-  //       "userId": userId,
-  //       "todoId": todoId
-  //     },
-  //     UpdateExpression: "set attachmentUrl = :attachmentUrl",
-  //     ExpressionAttributeValues: {
-  //       ":attachmentUrl": imageUrl
-  //     },
-  //     ReturnValues: "UPDATED_NEW"
-  //   };
-
-  //   // source:
-  //   // https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GettingStarted.NodeJs.03.html#GettingStarted.NodeJs.03.03
-  //   await this.docClient.update(params).promise();
-  // }
-
 }
 
 

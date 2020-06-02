@@ -34,9 +34,6 @@ custom:
 
 functions:
 
-  # Auth:
-  #   handler: src/lambda/auth/auth0Authorizer.handler
-
   GetBoxes:
     handler: src/lambda/http/getBoxes.handler
     events:
@@ -44,7 +41,6 @@ functions:
           method: get
           path: boxes
           cors: true
-          # authorizer: Auth
     iamRoleStatements:
       - Effect: Allow
         Action:
@@ -64,7 +60,6 @@ functions:
           method: get
           path: boxes/{sku}
           cors: true
-          # authorizer: Auth
     iamRoleStatements:
       - Effect: Allow
         Action:
@@ -79,16 +74,10 @@ functions:
           method: post
           path: boxes
           cors: true
-          # authorizer: Auth
           reqValidatorName: RequestBodyValidator
           request:
             schema:
               application/json: ${file(validators/create-box-request.json)}
-          # documentation:
-          #   summary: Create a new image
-          #   description: Create a new image
-          #   requestModels:
-          #     'application/json': CreateTodoRequest
     iamRoleStatements:
       - Effect: Allow
         Action:
@@ -106,7 +95,6 @@ functions:
           method: patch
           path: boxes/{sku}
           cors: true
-          # authorizer: Auth
           request:
             schema:
               application/json: ${file(validators/update-box-request.json)}
@@ -119,32 +107,6 @@ functions:
         Action:
           - dynamodb:UpdateItem
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.BOXES_TABLE}/${self:provider.environment.INDEX_NAME}
-
-  
-  # GenerateUploadUrl:
-  #   handler: src/lambda/http/generateUploadUrl.handler
-  #   events:
-  #     - http:
-  #         cors: true
-  #         method: post
-  #         path: todos/{todoId}/attachment
-  #         authorizer: Auth
-  #   iamRoleStatements:
-  #     - Effect: Allow
-  #       Action:
-  #         - s3:PutObject
-  #         - s3:GetObject
-  #       Resource: 'arn:aws:s3:::${self:provider.environment.IMAGES_S3_BUCKET}/*'
-  #     - Effect: Allow
-  #       Action:
-  #         - dynamodb:UpdateItem
-  #         - dynamodb:GetItem
-  #       Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
-  #     - Effect: Allow
-  #       Action:
-  #         - dynamodb:UpdateItem
-  #         - dynamodb:GetItem
-  #       Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}/${self:provider.environment.INDEX_NAME}
 
 resources:
   Resources:
@@ -166,38 +128,12 @@ resources:
         AttributeDefinitions:
           - AttributeName: sku
             AttributeType: S
-          # - AttributeName: length
-          #   AttributeType: N
-          # - AttributeName: width
-          #   AttributeType: N
-          # - AttributeName: height
-          #   AttributeType: N
           
         KeySchema:
           - AttributeName: sku
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST
         TableName: ${self:provider.environment.BOXES_TABLE}
-        # GlobalSecondaryIndexes:
-          # - IndexName: length-${self:provider.environment.INDEX_NAME}
-          #   KeySchema:
-          #     - AttributeName: length
-          #       KeyType: HASH
-          #   Projection:
-          #     ProjectionType: KEYS_ONLY 
-          # - IndexName: height-${self:provider.environment.INDEX_NAME}
-          #   KeySchema:
-          #     - AttributeName: height
-          #       KeyType: HASH
-          #   Projection:
-          #     ProjectionType: KEYS_ONLY 
-          # - IndexName: ${self:provider.environment.INDEX_NAME}
-          #   KeySchema:
-          #     - AttributeName: width
-          #       KeyType: HASH
-          #   Projection:
-          #     ProjectionType: KEYS_ONLY 
-        
 
     AttachmentsBucket:
       Type: AWS::S3::Bucket
