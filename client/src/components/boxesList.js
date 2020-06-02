@@ -87,9 +87,9 @@ export default class BoxesList extends React.Component {
                                     <CardBody>
                                         <CardTitle>Box #: {box.sku} </CardTitle>
                                         <CardText>
-                                            W: {box.width} MM => {box.width / 10} CM <br />
-                                            L: {box.length || box.leng} MM => {(box.length || box.leng) / 10} CM <br />
-                                            H: {box.height} MM => {box.height / 10} CM
+                                            W: {box.width} CM => {box.width * 10} MM <br />
+                                            L: {box.length || box.leng} CM => {(box.length || box.leng) * 10} MM <br />
+                                            H: {box.height} CM => {box.height * 10} MM
                                         </CardText>
 
                                         <Button color='link'><Link to={`/boxes/${box.sku}`}>Details</Link></Button>
