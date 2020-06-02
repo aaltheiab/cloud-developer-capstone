@@ -8,20 +8,20 @@ import {
     Card, CardImg, CardText, CardBody,
     CardTitle, Button, Container, Row, Col
 } from 'reactstrap';
-
-const BASE_URL = 'https://kpkzrk2tc7.execute-api.us-east-1.amazonaws.com/dev/boxes/'
+import { Link } from 'react-router-dom';
+import {BASE_URL} from '../config'
 
 export default class BoxesList extends React.Component {
 
     state = {
-        images: [],
-        length:'',
+        boxes: [],
+        length: '',
         width: '',
         height: ''
     };
 
     handleChange = event => {
-        switch(event.target.id){
+        switch (event.target.id) {
             case 'lengthId':
                 this.setState({ length: event.target.value });
                 break;
@@ -35,14 +35,14 @@ export default class BoxesList extends React.Component {
     }
 
     handleKeyDown = event => {
-        if(event.keyCode ===  13) {
+        if (event.keyCode === 13) {
             this.fetchResult(event);
         }
     }
 
     fetchResult = event => {
         axios.get(`${BASE_URL}?leng=${this.state.length}&width=${this.state.width}&height=${this.state.height}`).then(res => {
-            this.setState({ images: res.data.items })
+            this.setState({ boxes: res.data.items })
         });
     }
 
@@ -53,25 +53,22 @@ export default class BoxesList extends React.Component {
 
     componentDidMount() {
         axios.get(`${BASE_URL}`).then(res => {
-            this.setState({ images: res.data.items })
+            this.setState({ boxes: res.data.items })
         });
     }
 
+    boxClicked = event => {
+        alert(event.target.name);
+    }
 
     render() {
         return (
-
             <div class="row justify-content-center">
+                {/* {boxesList} */}
                 <br /><br /><br />
 
                 <div className='col-cm-12'>
                     <InputGroup>
-                        {/* <InputGroupAddon addonType="prepend"> */}
-                            {/* <InputGroupText>
-                                <span>M</span>
-                                <Input addon type="checkbox" aria-label="Checkbox for following text input" />
-                            </InputGroupText> */}
-                        {/* </InputGroupAddon> */}
                         <Input type='number' onKeyDown={this.handleKeyDown} onChange={this.handleChange} id='lengthId' placeholder="Length" />
                         <Input type='number' onKeyDown={this.handleKeyDown} onChange={this.handleChange} id='widthId' placeholder="Width" />
                         <Input type='number' onKeyDown={this.handleKeyDown} onChange={this.handleChange} id='heightId' placeholder="Height" />
@@ -83,7 +80,7 @@ export default class BoxesList extends React.Component {
 
                 <Container className="themed-container">
                     <Row>
-                        {this.state.images.map(box => (
+                        {this.state.boxes.map(box => (
                             <Col sm='4'>
                                 <Card>
                                     <CardImg top src={box.attachmentUrl} />
@@ -94,7 +91,8 @@ export default class BoxesList extends React.Component {
                                             L: {box.length || box.leng} MM => {(box.length || box.leng) / 10} CM <br />
                                             H: {box.height} MM => {box.height / 10} CM
                                         </CardText>
-                                        {/* <Button>Button</Button> */}
+
+                                        <Button color='link'><Link to={`/boxes/${box.sku}`}>Details</Link></Button>
                                     </CardBody>
                                 </Card>
                             </Col>
@@ -107,4 +105,11 @@ export default class BoxesList extends React.Component {
         )
     }
 
+}
+
+
+function boxesList() {
+    return (
+        <p>00000</p>
+    )
 }
