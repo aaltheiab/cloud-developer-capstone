@@ -29,7 +29,6 @@ function App() {
             </NavItem>  
           </Nav>
 
-          <NavbarText>Search For you Best</NavbarText>
         </Collapse>
       </Navbar>
       <Route exact path='/boxes/' component={BoxesList} />
