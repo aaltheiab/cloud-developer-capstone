@@ -13,16 +13,17 @@ import {
   NavLink,
   NavbarText
 } from 'reactstrap';
+
 function App() {
   return (
     <div className="App">
       <Navbar color="light" light expand="md">
-        <NavbarBrand href="/boxes/">Boxes</NavbarBrand>
+        <NavbarBrand href="/">Boxes</NavbarBrand>
         <NavbarToggler />
         <Collapse navbar>
           <Nav className="mr-auto" navbar>
             <NavItem>
-              <NavLink href="/boxes/">All Boxes</NavLink>
+              <NavLink href="/">All Boxes</NavLink>
             </NavItem>
             <NavItem>
               <NavLink href="https://github.com/aaltheiab/cloud-developer-capstone">GitHub</NavLink>
@@ -31,7 +32,8 @@ function App() {
 
         </Collapse>
       </Navbar>
-      <Route exact path='/boxes/' component={BoxesList} />
+      
+      <Route exact path='/' component={BoxesList} />
       <Route path='/boxes/:sku' component={BoxView} />
     </div>
   );
