@@ -1,15 +1,18 @@
 import * as AWS from 'aws-sdk'
+import * as AWSXRay from 'aws-xray-sdk'
 import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 import { BoxItem } from '../models/BoxItem'
 import { CreateBoxRequest } from '../requests/CreateBoxRequest'
 import { UpdateBoxRequest } from '../requests/UpdateBoxRequest'
 import { createLogger } from '../utils/logger'
+
 const logger = createLogger('BoxesAccess')
+const XAWS = AWSXRay.captureAWS(AWS)
 
 const DEFAULT_URL = 'https://aaltheiab-serverless-capstone-dev.s3.amazonaws.com/no-image.jpg'
 const PERCENTAGE = 10
 function createDynamoDBClient() {
-  return new AWS.DynamoDB.DocumentClient()
+  return new XAWS.DynamoDB.DocumentClient()
 }
 
 export class BoxesAccess {

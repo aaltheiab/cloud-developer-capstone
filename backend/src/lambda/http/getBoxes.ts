@@ -1,6 +1,5 @@
 import 'source-map-support/register'
 import { getBoxes } from '../../businessLogic/boxes'
-// import { getUserId } from '../utils'
 import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } from 'aws-lambda'
 import { createLogger } from '../../utils/logger'
 
