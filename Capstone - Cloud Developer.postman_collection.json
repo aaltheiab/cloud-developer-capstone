@@ -1,0 +1,377 @@
+{
+	"info": {
+		"_postman_id": "95dda43d-5ca8-448a-b9c2-2176f22d7a0a",
+		"name": "Capstone - Cloud Developer",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Boxes List",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "f1aa780e-a5dd-49cd-821e-c6a23589ffc7",
+						"exec": [
+							"pm.test(\"It should have 200 Response Code\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// // =======================================================================================",
+							"",
+							"",
+							"var schema = {",
+							"    \"type\": \"object\",",
+							"    \"properties\": {",
+							"        \"items\": { \"type\": \"array\" }",
+							"    }",
+							"};",
+							"",
+							"var body = pm.response.json();",
+							"",
+							"pm.test('Schema check should be valid', function() {",
+							"  pm.expect(tv4.validate(body, schema)).to.be.true;",
+							"});",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "266f728f-7e1f-4fdc-b7fe-274581720bd0",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://{{apiId}}.execute-api.us-east-1.amazonaws.com/dev/boxes",
+					"protocol": "https",
+					"host": [
+						"{{apiId}}",
+						"execute-api",
+						"us-east-1",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"dev",
+						"boxes"
+					],
+					"query": [
+						{
+							"key": "sku",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "height",
+							"value": "60",
+							"disabled": true
+						},
+						{
+							"key": "width",
+							"value": "53",
+							"disabled": true
+						},
+						{
+							"key": "length",
+							"value": "72",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Box",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "38101bf5-5418-41ce-a9f6-7683109293bb",
+						"exec": [
+							"var requestObject = {",
+							"    url: 'https://kpkzrk2tc7.execute-api.us-east-1.amazonaws.com/dev/boxes',",
+							"    method: 'POST',",
+							"}",
+							"",
+							"//========================================================================================",
+							"",
+							"",
+							"// Invalid leng value (it should be float)",
+							"requestObject['body'] = {",
+							"        \"attachmentUrl\": \"https://aaltheiab-serverless-capstone-dev.s3.amazonaws.com/150.jpeg\",",
+							"        \"height\": 8,",
+							"        \"width\": 28,",
+							"        \"sku\": \"150\",",
+							"        \"leng\": \"28\"",
+							"}",
+							"",
+							"pm.sendRequest(requestObject, (err, res) => {",
+							"   pm.test('It should Fail (leng type should be Float)', function () {",
+							"    pm.expect(res).to.have.property('code', 400);",
+							"  });",
+							"});",
+							"",
+							"//========================================================================================",
+							"",
+							"// invalid request body (missing sku)",
+							"requestObject['body'] = {",
+							"        \"attachmentUrl\": \"https://aaltheiab-serverless-capstone-dev.s3.amazonaws.com/150.jpeg\",",
+							"        \"height\": 8,",
+							"        \"width\": 28,",
+							"        \"leng\": 28",
+							"}",
+							"pm.sendRequest(requestObject, (err, res) => {",
+							"   pm.test('Invalid Request (Missing sku)', function () {",
+							"    pm.expect(res).to.have.property('code', 400);",
+							"  });",
+							"});",
+							"",
+							"//========================================================================================",
+							"",
+							"requestObject['body'] = {",
+							"        \"attachmentUrl\": \"https://aaltheiab-serverless-capstone-dev.s3.amazonaws.com/150.jpeg\",",
+							"        \"height\": 8,",
+							"        \"leng\": 28,",
+							"        \"sku\": \"200\"",
+							"}",
+							"pm.sendRequest(requestObject, (err, res) => {",
+							"   pm.test('Invalid Request (Missing width)', function () {",
+							"    pm.expect(res).to.have.property('code', 400);",
+							"  });",
+							"});",
+							"",
+							"",
+							"",
+							"",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "fe82dbfd-608e-4990-b329-d95e7aac9d2e",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"attachmentUrl\": \"https://aaltheiab-serverless-capstone-dev.s3.amazonaws.com/150.jpeg\",\n\t\"height\": 8,\n\t\"width\": 28,\n\t\"sku\": \"150\",\n\t\"leng\": 28\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{apiId}}.execute-api.us-east-1.amazonaws.com/dev/boxes",
+					"protocol": "https",
+					"host": [
+						"{{apiId}}",
+						"execute-api",
+						"us-east-1",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"dev",
+						"boxes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Box",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "9252a2bd-9954-4174-97b5-bd5fa3a0b987",
+						"exec": [
+							"",
+							"var schema = {",
+							"    \"type\": \"object\",",
+							"    \"properties\": {",
+							"        \"item\": { \"type\": \"object\" }",
+							"    }",
+							"};",
+							"",
+							"var body = pm.response.json();",
+							"",
+							"pm.test('Schema check should be valid', function () {",
+							"    pm.expect(tv4.validate(body, schema)).to.be.true;",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"attachmentUrl\": \"https://aaltheiab-serverless-capstone-dev.s3.amazonaws.com/150.jpeg\",\n\t\"height\": 8,\n\t\"width\": 28,\n\t\"sku\": \"150\",\n\t\"leng\": 28\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{apiId}}.execute-api.us-east-1.amazonaws.com/dev/boxes/2",
+					"protocol": "https",
+					"host": [
+						"{{apiId}}",
+						"execute-api",
+						"us-east-1",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"dev",
+						"boxes",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "BOX Item",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "497317c8-2cde-425a-a7f9-a30c18526013",
+						"exec": [
+							"pm.test(\"It should have 200 Response Code\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"var schema = {",
+							"    \"type\": \"object\",",
+							"    \"properties\": {",
+							"        \"item\": { \"type\": \"object\" }",
+							"    }",
+							"};",
+							"",
+							"var body = pm.response.json();",
+							"",
+							"pm.test('Schema check should be valid', function () {",
+							"    pm.expect(tv4.validate(body, schema)).to.be.true;",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{apiId}}.execute-api.us-east-1.amazonaws.com/dev/boxes/150",
+					"protocol": "https",
+					"host": [
+						"{{apiId}}",
+						"execute-api",
+						"us-east-1",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"dev",
+						"boxes",
+						"150"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "ec637771-7df5-4a4b-91ed-cb9ef444c300",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "9cc011e4-21ae-4e7e-8354-fc89cd30c137",
+				"type": "text/javascript",
+				"exec": [
+					"pm.test(\"Body Exists\", function () {",
+					"    pm.response.to.be.withBody;",
+					"});",
+					"",
+					"pm.test(\"It should have JSON response\", function () {",
+					"    pm.response.to.be.json;",
+					"});"
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "f12ed832-e885-448c-b9b4-642fdc676947",
+			"key": "apiId",
+			"value": "kpkzrk2tc7",
+			"type": "string"
+		}
+	],
+	"protocolProfileBehavior": {}
+}
