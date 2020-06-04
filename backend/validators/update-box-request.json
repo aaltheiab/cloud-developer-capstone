@@ -17,6 +17,9 @@
     },
     "height": {
       "type": "number"
+    },
+    "category": {
+      "type": "string"
     }
   },
   "additionalProperties": false

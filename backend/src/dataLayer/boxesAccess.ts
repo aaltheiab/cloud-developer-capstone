@@ -25,8 +25,6 @@ export class BoxesAccess {
 
   async getBoxes(params: object): Promise<BoxItem[]> {
 
-
-
     if (params && (params['width'] || params['height'] || params['length'] || params['leng'])) {
       var width = params['width']
       var height = params['height']
@@ -34,7 +32,10 @@ export class BoxesAccess {
 
       var paramResult = {
         TableName: this.boxesTable,
-        ExpressionAttributeValues: {},
+        KeyConditionExpression: "category = :cat",
+        ExpressionAttributeValues: {
+          ":cat": "1"
+        },
         FilterExpression: ''
       }
 
@@ -70,14 +71,21 @@ export class BoxesAccess {
         paramResult
       })
 
-      const result = await this.docClient.scan(paramResult).promise()
+      const result = await this.docClient.query(paramResult).promise()
 
       return result.Items as BoxItem[]
 
     } else {
 
-      const result = await this.docClient.scan({
-        TableName: this.boxesTable
+      logger.info("Fetching All category 1")
+
+      // fetch all category "1"
+      const result = await this.docClient.query({
+        TableName: this.boxesTable,
+        KeyConditionExpression: "category = :cat",
+        ExpressionAttributeValues: {
+          ":cat": "1"
+        }
       }).promise()
 
       const items = result.Items
@@ -85,7 +93,6 @@ export class BoxesAccess {
     }
 
   }
-
 
   async createBox(sku: string, newBox: CreateBoxRequest): Promise<BoxItem> {
     const createdAt = new Date().toISOString()
@@ -111,7 +118,8 @@ export class BoxesAccess {
     const params = {
       TableName: this.boxesTable,
       Key: {
-        sku
+        sku,
+        category: "1"
       },
       UpdateExpression: "set leng = :leng, width = :width, height = :height, attachmentUrl=:attachmentUrl",
       ExpressionAttributeValues: {
@@ -135,18 +143,19 @@ export class BoxesAccess {
 
     const params = {
       TableName: this.boxesTable,
-      Key: {
-        sku
+      KeyConditionExpression: 'sku = :sku AND category = :cat',
+      ExpressionAttributeValues: {
+        ":sku": sku,
+        ":cat": "1"
       }
     };
 
-    const result = await this.docClient.get(params).promise()
+    const result = await this.docClient.query(params).promise()
 
-    return result.Item as BoxItem
+    return result.Items[0] as BoxItem
   }
 
 }
-
 
 function generateParam(paramStr: string, paramValue: string) {
 

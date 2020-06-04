@@ -20,13 +20,17 @@
     },
     "height": {
       "type": "number"
+    },
+    "category": {
+      "type": "string"
     }
   },
   "required": [
     "sku",
     "leng",
     "width",
-    "height"
+    "height",
+    "category"
   ],
   "additionalProperties": false
 }
